@@ -124,7 +124,7 @@ function App() {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
               <input
                 type="text"
-                placeholder="admin"
+                placeholder="Username"
                 className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-blue-500 transition-colors"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -134,7 +134,7 @@ function App() {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
               <input
                 type="password"
-                placeholder="admin"
+                placeholder="••••••••"
                 className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-blue-500 transition-colors"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
