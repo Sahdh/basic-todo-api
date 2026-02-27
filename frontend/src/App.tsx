@@ -10,6 +10,12 @@ function App() {
   const [newCatName, setNewCatName] = useState("");
   const [error, setError] = useState("");
 
+  // Auth state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+
   // Theme state
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -78,6 +84,76 @@ function App() {
     }
   };
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === "admin" && password === "admin") {
+      setIsAuthenticated(true);
+      setLoginError("");
+    } else {
+      setLoginError("Invalid username or password");
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUsername("");
+    setPassword("");
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className={`min-h-screen py-10 flex justify-center items-center transition-colors duration-300 ${isDarkMode ? "dark bg-gray-900" : "bg-gray-100"}`}>
+        <div className="bg-white dark:bg-gray-800 w-full max-w-md shadow-xl rounded-lg p-8 transition-colors duration-300">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Sign In</h2>
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition flex-shrink-0"
+              title="Toggle Theme"
+            >
+              {isDarkMode ? "☀️" : "🌙"}
+            </button>
+          </div>
+          {loginError && (
+            <div className="bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 p-3 rounded mb-5 text-sm font-semibold border dark:border-red-800">
+              {loginError}
+            </div>
+          )}
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
+              <input
+                type="text"
+                placeholder="admin"
+                className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-blue-500 transition-colors"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+              <input
+                type="password"
+                placeholder="admin"
+                className="w-full border dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-blue-500 transition-colors"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded transition-colors"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen py-10 flex justify-center items-start transition-colors duration-300 ${isDarkMode ? "dark bg-gray-900" : "bg-gray-100"}`}>
       <div className="bg-white dark:bg-gray-800 w-full max-w-xl shadow-xl rounded-lg p-6 transition-colors duration-300">
@@ -87,14 +163,22 @@ function App() {
           <h1 className="text-3xl font-bold font-sans text-gray-800 dark:text-gray-100">
             Enterprise Task Manager
           </h1>
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-            aria-label="Toggle Dark Mode"
-            title="Toggle Theme"
-          >
-            {isDarkMode ? "☀️" : "🌙"}
-          </button>
+          <div className="flex space-x-3 items-center">
+            <button
+              onClick={handleLogout}
+              className="text-sm font-semibold text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+            >
+              Logout
+            </button>
+            <button
+              onClick={toggleDarkMode}
+              className="p-1.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+              aria-label="Toggle Dark Mode"
+              title="Toggle Theme"
+            >
+              {isDarkMode ? "☀️" : "🌙"}
+            </button>
+          </div>
         </div>
 
         {error && (
@@ -175,8 +259,8 @@ function App() {
                   <div className="flex flex-col">
                     <span
                       className={`text-sm transition-colors ${todo.is_completed
-                          ? "line-through text-gray-400 dark:text-gray-500"
-                          : "text-gray-800 dark:text-gray-200"
+                        ? "line-through text-gray-400 dark:text-gray-500"
+                        : "text-gray-800 dark:text-gray-200"
                         }`}
                     >
                       {todo.title}
