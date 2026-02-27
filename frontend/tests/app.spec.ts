@@ -33,7 +33,20 @@ test("login page shows sign in form and theme toggle", async ({ page }) => {
   await expect(page.locator('input[placeholder="••••••••"]')).toBeVisible();
   await expect(page.locator('button[title="Toggle Theme"]')).toBeVisible();
 });
-
+// signup flow
+test('can navigate to signup and validate passwords', async ({ page }) => {
+  await page.click('text=Don\'t have an account? Sign up');
+  await expect(page.locator('text=Sign Up')).toBeVisible();
+  await page.fill('input[placeholder="Username"]', 'newuser');
+  await page.fill('input[placeholder="••••••••"]', 'pass1');
+  await page.fill('input[placeholder="••••••••"] >> nth=1', 'different');
+  await page.click('button:has-text("Sign Up")');
+  await expect(page.locator('text=Passwords do not match')).toBeVisible();
+  // correct it
+  await page.fill('input[placeholder="••••••••"] >> nth=1', 'pass1');
+  await page.click('button:has-text("Sign Up")');
+  await expect(page.locator('text=Enterprise Task Manager')).toBeVisible();
+});
 // 2. invalid login shows error
 test("invalid credentials show error message", async ({ page }) => {
   await login(page, "bad", "creds");
